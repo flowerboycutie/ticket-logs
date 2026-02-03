@@ -1,4 +1,4 @@
-"use client"; // Add this if using Next.js App Router
+"use client";
 
 import { useState } from "react";
 
@@ -25,7 +25,7 @@ export default function TicketCard({
 }: TicketCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isTruncated = details.length > 150;
-  const truncDetails = isTruncated? details.substring(0, 150) + "..." : details;
+  const truncDetails = isTruncated ? details.substring(0, 150) + "..." : details;
 
   const statusColors = {
     Pending: "bg-yellow-500",
@@ -40,9 +40,8 @@ export default function TicketCard({
   };
 
   return (
-    <div 
-      className="ticket-card-container bg-white text-gray-500 px-4 py-8 rounded-lg flex flex-col gap-4 shadow z-0 cursor-pointer transition-shadow [@media(hover:hover)]:hover:shadow-lg"
-      onClick={() => isTruncated && setIsExpanded(!isExpanded)}
+    <div className="ticket-card-container bg-white text-gray-500 px-4 py-8 rounded-lg flex flex-col gap-4 shadow z-0 transition-shadow [@media(hover:hover)]:hover:shadow-lg"
+            onClick={() => setIsExpanded(!isExpanded)}
     >
       <div className="flex items justify-between gap-4 items-center">
         <h3 className="text-xl semi-bold text-gray-800">{subject}</h3>
@@ -56,25 +55,27 @@ export default function TicketCard({
 
       <p>{ticketId}</p>
 
-      <p>
-        {isExpanded ? details : truncDetails}
-        {isTruncated && !isExpanded && (
-          <>
-            <br />
-            <span className="underline text-blue-500 mt-1 inline-block">
-              Tap to expand
-            </span>
-          </>
-        )}
-        {isTruncated && isExpanded && (
-          <>
-            <br />
-            <span className="underline text-blue-500 mt-1 inline-block">
-              Tap to collapse
-            </span>
-          </>
-        )}
-      </p>
+      {/* Smooth expanding details section */}
+      <div>
+        <div
+          className={`grid transition-all duration-300 ease-in-out ${
+            isExpanded ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <p className="pb-2">{isExpanded ? details : truncDetails}</p>
+          </div>
+        </div>
+
+        {
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="underline text-blue-500 mt-1 text-left focus:outline-none transition-colors [@media(hover:hover)]:hover:text-blue-600"
+          >
+            {isExpanded ? "Tap to collapse" : "Tap to see details"}
+          </button>
+        }
+      </div>
 
       <div className="flex justify-between">
         <span

@@ -28,7 +28,7 @@ const tickets = [
   },
 
   {
-    subject: "Button not showing up bwaahaha",
+    subject: "Button not showing up bwaahaha Button not showing up bwaahah",
     status: "In Progress" as const,
     ticketId: "TKT-651",
     details:
