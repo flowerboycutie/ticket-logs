@@ -1,3 +1,8 @@
+"use client";
+
+import { Fragment } from "react";
+import { useState } from "react";
+
 interface Ticket {
   subject: string;
   status: "Pending" | "In Progress" | "Resolved";
@@ -5,7 +10,8 @@ interface Ticket {
   details: string;
   priority: "Low" | "Medium" | "High";
   lastUpdated: string;
-  app: string;
+  appLogo: string;
+  appName: string;
 }
 
 interface TicketTableProps {
@@ -13,8 +19,11 @@ interface TicketTableProps {
 }
 
 export default function TicketTable({ tickets }: TicketTableProps) {
-  const truncDetails = (details: string) =>
-    details.length > 20 ? details.substring(0, 20) + "..." : details;
+  const [expandedTicketId, setExpandedTicketId] = useState<string | null>(null);
+
+  const toggleExpand = (ticketId: string) => {
+    setExpandedTicketId(expandedTicketId === ticketId ? null : ticketId);
+  };
 
   const statusColors = {
     Pending: "bg-yellow-500",
@@ -23,44 +32,81 @@ export default function TicketTable({ tickets }: TicketTableProps) {
   };
 
   const priorityColors = {
-    Low: "text-green-500",
-    Medium: "text-yellow-500",
-    High: "text-red-500",
+    Low: "bg-green-500",
+    Medium: "bg-yellow-500",
+    High: "bg-red-500",
   };
 
   return (
-    <div className="rounded shadow p-4 pb-0">
-      <table className="w-full text-left">
-        <thead className="">
+    <div className="rounded-lg shadow text-gray-500">
+      <table className="w-full text-left bg-white rounded-lg">
+        <thead>
           <tr className="uppercase text-xs">
-            <th className="py-3">Ticket ID</th>
-            <th className="py-3">Subject</th>
-            <th className="py-3">Details</th>
-            <th className="py-3">Status</th>
-            <th className="py-3">Priority</th>
-            <th className="py-3">Last Updated</th>
-            <th className="py-3">App</th>
+            <th className="px-4 h-12">Ticket ID</th>
+            <th className="px-4 h-12">Subject</th>
+            <th className="px-4 h-12">Status</th>
+            <th className="px-4 h-12">Priority</th>
+            <th className="px-4 h-12">Last Updated</th>
+            <th className="px-4 h-12">App</th>
           </tr>
         </thead>
-        <tbody className="">
+        <tbody>
           {tickets.map((ticket) => (
-            <tr>
-              <td className="py-8">{ticket.ticketId}</td>
-              <td className="ticket-subject py-8 font-bold">{ticket.subject}</td>
-              <td className="py-8">{truncDetails(ticket.details)}</td>
-              <td className="py-8">
-                <span className="text-nowrap">
+            <Fragment key={ticket.ticketId}>
+              {/* Main Row */}
+              <tr
+                onClick={() => toggleExpand(ticket.ticketId)}
+                className="cursor-pointer group [@media(hover:hover)]:hover:bg-gray-200 transition-colors"
+              >
+                <td className="p-4 border-t border-gray-300">
+                  {ticket.ticketId}
+                </td>
+                <td className="p-4 border-t border-gray-300 font-bold text-gray-800 flex items-center justify-between">
+                  {ticket.subject} <span className="text-gray-400 text-xs border-none group-hover:text-(--green) textwrap-nowrap">Click to see details...</span>
+                </td>
+                <td className="p-4 border-t border-gray-300">
+                  <span className="text-nowrap text-gray-800">
+                    <span
+                      className={`inline-block rounded-full w-2 h-2 mr-2 ${statusColors[ticket.status]}`}
+                    ></span>
+                    {ticket.status}
+                  </span>
+                </td>
+                <td className="border-t border-gray-300">
                   <span
-                    className={`inline-block rounded-full w-2 h-2 mr-2 ${statusColors[ticket.status]}`}
-                    style={{ backgroundColor: statusColors[ticket.status] }}
-                  ></span>
-                  {ticket.status}
-                </span>
-              </td>
-              <td className={`py-8 ${priorityColors[ticket.priority]}`}>{ticket.priority}</td>
-              <td className="py-8">{ticket.lastUpdated}</td>
-              <td className="py-8">{ticket.app}</td>
-            </tr>
+                    className={`${priorityColors[ticket.priority]} rounded-full px-4 py-1 text-white`}
+                  >
+                    {ticket.priority}
+                  </span>
+                </td>
+                <td className="p-4 border-t border-gray-300">
+                  {ticket.lastUpdated}
+                </td>
+                <td className="p-4 border-t border-gray-300">
+                  <img
+                    src={ticket.appLogo}
+                    alt={ticket.appName}
+                    className="h-6 items-center"
+                  />
+                </td>
+              </tr>
+
+              {/* Expanded Details Row */}
+              {expandedTicketId === ticket.ticketId && (
+                <tr>
+                  <td colSpan={7} className="rounded-lg w-32">
+                    <div className="p-6">
+                      <h4 className="font-semibold text-gray-800 mb-2">
+                        Details:
+                      </h4>
+                      <p className="text-gray-700 leading-relaxed">
+                        {ticket.details}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </Fragment>
           ))}
         </tbody>
       </table>
