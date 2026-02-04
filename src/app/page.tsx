@@ -1,6 +1,7 @@
 import Header from "./components/Header";
 import TicketCard from "./components/TicketCard";
-import TicketTable from "./components/TicketTable";
+// import TicketTable from "./components/TicketTable";
+import TicketCardDesktop from "./components/TicketCardDesktop";
 
 const tickets = [
   {
@@ -12,7 +13,7 @@ const tickets = [
     priority: "High" as const,
     lastUpdated: "May 20, 2024",
     appLogo: "/paraverse-apps/logo-briefcase.svg",
-    appName: "Paraverse",
+    appName: "Briefcase",
   },
 
   {
@@ -23,8 +24,8 @@ const tickets = [
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia pariatur tenetur dolorem aspernatur odio inventore magnam? Molestiae, nihil. Facilis, deserunt. Accusamus quae tenetur dolorem expedita corrupti saepe possimus iusto itaque?",
     priority: "Medium" as const,
     lastUpdated: "May 30, 2023",
-    appLogo: "/paraverse-apps/logo-briefcase.svg",
-    appName: "Paraverse",
+    appLogo: "/paraverse-apps/logo-eventually.svg",
+    appName: "Eventually",
   },
 
   {
@@ -35,15 +36,15 @@ const tickets = [
       "Lorem loreaasdkahaknah ofns hnaoijdoijad pqishad jadoah ipsum dolor sit amet consectetur adipisicing elit. Quia pariatur tenetur dolorem aspernatur odio inventore magnam? Molestiae, nihil. Facilis, deserunt. Accusamus quae tenetur dolorem expedita corrupti saepe possimus iusto itaque?",
     priority: "Low" as const,
     lastUpdated: "May 30, 2023",
-    appLogo: "/paraverse-apps/logo-briefcase.svg",
-    appName: "Paraverse",
+    appLogo: "/paraverse-apps/logo-mflix.svg",
+    appName: "M-Flix",
   },
 ];
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col tracking-widest">
-      < Header />
+      <Header />
       <main className="p-4 text-black flex flex-col flex-1 gap-8 mt-16 bg-gray-100">
         <div className="fixed top-16 left-0 right-0 p-4 h-32 lg:hidden bg-gray-100 border border-gray-200 z-90">
           <header className="main-container-header flex flex-col h-full justify-between">
@@ -77,8 +78,20 @@ export default function Home() {
             />
           ))}
         </div>
-        <div className="hidden lg:block pt-8">
-          <TicketTable tickets={tickets} />
+        <div className="hidden lg:flex pt-8 flex-col gap-6">
+          {tickets.map((ticket) => (
+            <TicketCardDesktop
+              key={ticket.ticketId}
+              subject={ticket.subject}
+              status={ticket.status}
+              ticketId={ticket.ticketId}
+              details={ticket.details}
+              priority={ticket.priority}
+              lastUpdated={ticket.lastUpdated}
+              appLogo={ticket.appLogo}
+              appName={ticket.appName}
+            />
+          ))}
         </div>
       </main>
       <footer className="h-8 bottom-0 left-0 right-0 flex items-center bg-(--green) px-4">
