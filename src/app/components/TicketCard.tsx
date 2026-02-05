@@ -11,6 +11,7 @@ interface TicketCardProps {
   lastUpdated: string;
   appLogo: string;
   appName: string;
+    onDelete: (ticketId: string) => void;  
 }
 
 export default function TicketCard({
@@ -22,6 +23,7 @@ export default function TicketCard({
   lastUpdated,
   appLogo,
   appName,
+  onDelete,
 }: TicketCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isTruncated = details.length > 150;

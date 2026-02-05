@@ -1,9 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Header from "./components/Header";
 import TicketCard from "./components/TicketCard";
-// import TicketTable from "./components/TicketTable";
 import TicketCardDesktop from "./components/TicketCardDesktop";
 
-const tickets = [
+const initialTickets = [
   {
     subject: "Login button not working",
     status: "Pending" as const,
@@ -15,7 +17,6 @@ const tickets = [
     appLogo: "/paraverse-apps/logo-briefcase.svg",
     appName: "Briefcase",
   },
-
   {
     subject: "Internet problem",
     status: "Resolved" as const,
@@ -27,7 +28,6 @@ const tickets = [
     appLogo: "/paraverse-apps/logo-eventually.svg",
     appName: "Eventually",
   },
-
   {
     subject: "Button not showing up bwaahaha Button not showing up bwaahah",
     status: "In Progress" as const,
@@ -42,17 +42,25 @@ const tickets = [
 ];
 
 export default function Home() {
+  // Move tickets into state so we can modify it
+  const [tickets, setTickets] = useState(initialTickets);
+
+  // Delete function - filters out the ticket with matching ID
+  const handleDeleteTicket = (ticketId: string) => {
+    setTickets(tickets.filter((ticket) => ticket.ticketId !== ticketId));
+  };
+
   return (
     <div className="min-h-screen flex flex-col tracking-widest">
       <Header />
-      <main className="p-4 text-black flex flex-col flex-1 gap-8 mt-16 bg-gray-100">
-        <div className="fixed top-16 left-0 right-0 p-4 h-32 lg:hidden bg-gray-100 border border-gray-200 z-90">
+      <main className="p-4 text-black flex flex-col flex-1 gap-8 mt-16">
+        <div className="fixed top-16 left-0 right-0 p-4 h-32 lg:hidden z-90 backdrop-blur">
           <header className="main-container-header flex flex-col h-full justify-between">
             <div className="search-container overflow-hidden flex border border-[#cccccc] rounded-lg">
               <input
                 type="text"
                 placeholder="Filter by keyword..."
-                className="search rounded-lg py-2 px-3 w-full flex-1"
+                className="search py-2 px-3 w-full flex-1 bg-gray-100"
               />
               <button className="bg-(--green) px-2 text-white">Search</button>
             </div>
@@ -63,6 +71,8 @@ export default function Home() {
             </div>
           </header>
         </div>
+
+        {/* Mobile view */}
         <div className="tickets-card-container lg:hidden flex flex-col gap-4 mt-24 pt-8">
           {tickets.map((ticket) => (
             <TicketCard
@@ -75,10 +85,13 @@ export default function Home() {
               lastUpdated={ticket.lastUpdated}
               appLogo={ticket.appLogo}
               appName={ticket.appName}
+              onDelete={handleDeleteTicket}
             />
           ))}
         </div>
-        <div className="hidden lg:flex pt-8 flex-col gap-6">
+
+        {/* Desktop view */}
+        <div className="hidden lg:flex pt-8 flex-col gap-6 px-50">
           {tickets.map((ticket) => (
             <TicketCardDesktop
               key={ticket.ticketId}
@@ -90,6 +103,7 @@ export default function Home() {
               lastUpdated={ticket.lastUpdated}
               appLogo={ticket.appLogo}
               appName={ticket.appName}
+              onDelete={handleDeleteTicket}
             />
           ))}
         </div>

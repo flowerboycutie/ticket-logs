@@ -4,8 +4,14 @@
   --background: #F3F4F6;
   --foreground: #171717;
   --green: #248232;
+  --green-hover: #154d1d;
   --yellow: #F7F052;
   overscroll-behavior-y: contain;
+  background-image: url('/bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 @theme inline {
@@ -23,7 +29,7 @@
 } */
 
 body {
-  background: var(--background);
+  background: #24823280;
   color: var(--foreground);
   font-family: Inter, Helvetica, sans-serif;
   overscroll-behavior-y: contain;
